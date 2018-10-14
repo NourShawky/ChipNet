@@ -105,7 +105,7 @@ def readKittiCalib(filename, dtype = 'f8'):
     :param dtype:
     '''
     outdict = dict()
-    output = open(filename, 'rb')
+    output = open(filename, 'r')
     allcontent = output.readlines()
     output.close()
     for contentRaw in allcontent:
@@ -186,7 +186,7 @@ class KittiCalibration(object):
         '''
 
         '''
-        assert self.Tr33 != None
+        assert self.Tr33.all() != None
         return self.Tr33
 
 class BirdsEyeView(object):
@@ -200,20 +200,20 @@ class BirdsEyeView(object):
     im_v_float = None
     bev_x_ind = None
     bev_z_ind = None
-    def __init__(self, bev_res= 0.05, bev_xRange_minMax = (-10, 10), bev_zRange_minMax = (6, 46)):
+    def __init__(self, bev_res= 0.05, bev_range_minMax = (-10, 10), bev_zRange_minMax = (6, 46)):
         '''
         
         :param bev_res:
-        :param bev_xRange_minMax:
+        :param bev_range_minMax:
         :param bev_zRange_minMax:
         '''
 
         
         self.calib = KittiCalibration()
         bev_res = bev_res
-        bev_xRange_minMax = bev_xRange_minMax
+        bev_range_minMax = bev_range_minMax
         bev_zRange_minMax = bev_zRange_minMax
-        self.bevParams = BevParams(bev_res, bev_xRange_minMax, bev_zRange_minMax, self.imSize)
+        self.bevParams = BevParams(bev_res, bev_range_minMax, bev_zRange_minMax, self.imSize)
 
     
     def world2image(self, X_world, Y_world, Z_world):
@@ -404,15 +404,15 @@ class BirdsEyeView(object):
         
         :param inImage:
         '''
-        assert self.im_u_float != None
-        assert self.im_v_float != None
-        assert self.bev_x_ind != None
-        assert self.bev_z_ind != None
+        assert self.im_u_float.all() != None
+        assert self.im_v_float.all() != None
+        assert self.bev_x_ind.all() != None
+        assert self.bev_z_ind.all() != None
         
         
         if len(inImage.shape) > 2:
             outputData = np.zeros(self.bevParams.bev_size + (inImage.shape[2],), dtype = out_dtype)
-            for channel in xrange(0, inImage.shape[2]):
+            for channel in range(0, inImage.shape[2]):
                 outputData[self.bev_z_ind-1, self.bev_x_ind-1, channel] = inImage[self.im_v_float.astype('u4')-1, self.im_u_float.astype('u4')-1, channel]
         else:
             outputData = np.zeros(self.bevParams.bev_size, dtype = out_dtype)
@@ -425,14 +425,14 @@ class BirdsEyeView(object):
 
         @param bevMask:
         '''
-        assert self.xImInd_reverse != None
-        assert self.yImInd_reverse != None
-        assert self.XBevInd_reverse != None
-        assert self.ZBevInd_reverse != None
-        assert self.imSize_back != None
+        assert self.xImInd_reverse.all() != None
+        assert self.yImInd_reverse.all() != None
+        assert self.XBevInd_reverse.all() != None
+        assert self.ZBevInd_reverse.all() != None
+        assert self.imSize_back.all() != None
         if len(bevMask.shape) > 2:
             outputData = np.zeros(self.imSize_back + (bevMask.shape[2],), dtype = out_dtype)
-            for channel in xrange(0, bevMask.shape[2]):
+            for channel in range(0, bevMask.shape[2]):
                 outputData[self.yImInd_reverse, self.xImInd_reverse, channel] = bevMask[self.ZBevInd_reverse, self.XBevInd_reverse, channel]
         else:
             outputData = np.zeros(self.imSize_back, dtype = out_dtype)
