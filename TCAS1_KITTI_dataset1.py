@@ -1,4 +1,5 @@
 
+
 # coding: utf-8
 
 # In[1]:
@@ -41,14 +42,14 @@ velo_iterator   = dataset.velo
 calib_iterator  = dataset.calib
 gt_BEV_iterator = dataset.gt_road_BEV
 gt_img_iterator = dataset.gt_img
-print len(dataset)
+print (len(dataset))
 
 
 # In[4]:
 
 
 list_shuffle=range(len(dataset)*11)
-shuffle(list_shuffle)
+##shuffle(list_shuffle)
 # print list_shuffle
 
 
@@ -57,7 +58,9 @@ shuffle(list_shuffle)
 
 
 for i_sample in range(len(dataset)):
+    print(i_sample)
 # for i_sample in [2]:
+
     cam2   = next(cam2_iterator)
     velo   = next(velo_iterator)
     calib  = next(calib_iterator)
@@ -81,7 +84,7 @@ for i_sample in range(len(dataset)):
 
     
 
-    print "finish  frame {:5d}".format(i_sample)
+    print ("finish  frame {:5d}".format(i_sample))
 
 
 # In[6]:
