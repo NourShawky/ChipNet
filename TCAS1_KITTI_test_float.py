@@ -1,4 +1,5 @@
 
+
 # coding: utf-8
 
 # In[ ]:
@@ -58,7 +59,7 @@ dataset = pykitti_obj.obj(basedir+session)
 model_name=basedir+'ChipNet_KITTI2-10layer-float.h5'
 
 model=load_model(model_name)
-print model.summary()
+print (model.summary())
 
 
 # In[ ]:
@@ -69,7 +70,7 @@ print model.summary()
 cam2_iterator   = dataset.cam2
 velo_iterator   = dataset.velo
 calib_iterator  = dataset.calib
-print len(dataset)
+print (len(dataset))
 
 
 # In[ ]:
@@ -77,6 +78,7 @@ print len(dataset)
 
 from skimage import util
 from skimage.measure import label ,regionprops
+
 def getLargestCC(segmentation):
     labels = label(segmentation,background=0.0)
     areas=np.bincount(labels.flat)
@@ -89,8 +91,9 @@ def getLargestCC(segmentation):
 # In[ ]:
 
 
-# for i_sample in range(len(dataset)):
-for i_sample in [2]:
+for i_sample in range(len(dataset)):
+    
+##for i_sample in [2]:
     cam2   = next(cam2_iterator)
     velo   = next(velo_iterator)
     calib  = next(calib_iterator)
@@ -189,7 +192,7 @@ for i_sample in [2]:
     lower_boundary=[]
     lower_boundary_xyz=[]
     for j in range(180):
-        for i in range(63,-1,-1):
+        for i in range(61,-1,-1):
             if(y_fil[i,j]>0 and data_sph[i+2,j,0]>0):
                 
                 x=(-data_sph[i+1,j,1]+10)*20
@@ -241,7 +244,7 @@ for i_sample in [2]:
 #     boundary_img_list.append((np.int(cam2.shape[1]/2),cam2.shape[0]))
 #     boundary_img_list.append((np.int(cam2.shape[1]/2),cam2.shape[0]))
                                  
-    res_cam=Image.new('L', (cam2.shape[1],cam2.shape[0]), color=0)
+    res_cam=Image.new('L', (cam2.size[0],cam2.size[1]), color=0)
     draw_cam = ImageDraw.Draw(res_cam)
     draw_cam.polygon(boundary_img_list,fill=255,outline=255)
     draw_cam.polygon(lower_boundary_img_list,fill=0,outline=0)
@@ -253,6 +256,7 @@ for i_sample in [2]:
     
     #### generate res_vis   #####
     res_cam_array=np.array(res_cam)
+    cam2=np.array(cam2)
     vis_cam_array=cam2*255
     vis_cam_array[:,:,0]=vis_cam_array[:,:,0]*(1-res_cam_array/255)
     vis_cam=Image.fromarray(np.uint8(vis_cam_array))
@@ -263,7 +267,7 @@ for i_sample in [2]:
 #     res_sph.save(res_sph_dir+res_name,'png')
 
                                  
-    print "finish  frame "+res_name
+    print ("finish  frame "+res_name)
 
 
 # In[ ]:
@@ -325,4 +329,3 @@ y_dset[:,:,90]
 
 a=util.img_as_ubyte(y_dset[0])
 a[:,90]
-
