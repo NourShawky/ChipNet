@@ -50,7 +50,7 @@ print (len(dataset))
 
 
 list_shuffle=range(len(dataset)*11)
-list_shuffle = list(range(len(list_shuffle)))
+list_shuffle = list(list_shuffle)
 shuffle(list_shuffle)
 # print list_shuffle
 
