@@ -1,5 +1,4 @@
 
-
 # coding: utf-8
 
 # In[1]:
@@ -39,8 +38,10 @@ y_dset = fid.create_dataset('gt' , (len(dataset)*11,64,180)    , dtype='float32'
 
 cam2_iterator   = dataset.cam2
 velo_iterator   = dataset.velo
+print(dataset.velo)
 calib_iterator  = dataset.calib
 gt_BEV_iterator = dataset.gt_road_BEV
+print(dataset.gt_road_BEV)
 gt_img_iterator = dataset.gt_img
 print (len(dataset))
 
@@ -49,7 +50,8 @@ print (len(dataset))
 
 
 list_shuffle=range(len(dataset)*11)
-##shuffle(list_shuffle)
+list_shuffle = list(range(len(list_shuffle)))
+shuffle(list_shuffle)
 # print list_shuffle
 
 
@@ -58,8 +60,7 @@ list_shuffle=range(len(dataset)*11)
 
 
 for i_sample in range(len(dataset)):
-    print(i_sample)
-# for i_sample in [2]:
+
 
     cam2   = next(cam2_iterator)
     velo   = next(velo_iterator)
@@ -97,26 +98,26 @@ for i_sample in range(len(dataset)):
 # In[7]:
 
 
-label.shape
-
-
-# In[8]:
-
-
-# for i in range(200):
-#     print label[:,i]
-
-
-# In[9]:
-
-
-Image.fromarray(np.uint8(label*255))
-
-
-# In[10]:
-
-
-Image.fromarray(np.uint8(cam2*255))
+##label.shape
+##
+##
+### In[8]:
+##
+##
+### for i in range(200):
+###     print label[:,i]
+##
+##
+### In[9]:
+##
+##
+##Image.fromarray(np.uint8(label*255))
+##
+##
+### In[10]:
+##
+##
+##Image.fromarray(np.uint8(cam2*255))
 
 
 # In[11]:
