@@ -23,8 +23,12 @@ pretrain_name=base_dir+'ChipNet_KITTI2-10layer-float-weights.h5'
 
 
 # In[ ]:
-
-
+fid = h5py.File(model_name, 'w')
+fid.close()
+fid = h5py.File(weights_name, 'w')
+fid.close()
+fid = h5py.File(pretrain_name, 'w')
+fid.close()
 # load dataset and seperate
 fid = h5py.File(dataset_name, 'r')
 list_length=fid['img'].shape[0]
@@ -41,11 +45,11 @@ x_val = HDF5Matrix(dataset_name, 'img', start=train_list_length, end=list_length
 y_val = HDF5Matrix(dataset_name, 'gt' , start=train_list_length, end=list_length)
 
 
-print "shape of x_train: {:.30s}".format(np.array(x_train.shape)) 
-print "shape of y_train: {:.30s}".format(np.array(y_train.shape))
+print ("shape of x_train: {!s:.30s}".format(np.array(x_train.shape)) )
+print ("shape of y_train: {!s:.30s}".format(np.array(y_train.shape)))
 
-print "shape of x_val:   {:.30s}".format(np.array(x_val.shape)) 
-print "shape of y_val:   {:.30s}".format(np.array(y_val.shape)) 
+print ("shape of x_val:   {!s:.30s}".format(np.array(x_val.shape)) )
+print ("shape of y_val:   {!s:.30s}".format(np.array(y_val.shape)) )
 
 
 # In[ ]:
@@ -376,7 +380,7 @@ x = L.Activation('sigmoid')(x)
 
 x = Lambda(lambda x : x[:,:,:,0])(x)
 model = Model(inputs=inputs, outputs=x)
-opti = optimizers.Adam(lr=learning_rate)
+opti = optimizers.Adam()#lr=learning_rate)
 model.compile(loss='binary_crossentropy',
               optimizer=opti,
               metrics=['mae'])
@@ -398,8 +402,8 @@ print (model.summary())
 callback_list=[ModelCheckpoint(model_name,monitor='val_loss',save_best_only=True,mode='min',verbose=1)]
 
 model.fit(x_train, [y_train],
-          batch_size=batch_size,
-          epochs=epochs,
+          batch_size=10,
+          epochs=50,
           verbose=1,
           validation_data=(x_val, [y_val]),shuffle='batch',callbacks=callback_list)
 
